@@ -7,20 +7,27 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('articles')
 export class ArticlesController {
 
+    // inject the article service into the controller as a dependency
     constructor(private articlesService: ArticlesService) { }
 
+
+    // endpoints for create a new article
     @UseGuards(AuthGuard('jwt'))
     @Post()
     create(@Body() dto: ArticlesDto) {
         return this.articlesService.create(dto);
     }
 
+
+    // endpoints for get all articles
     @UseGuards(AuthGuard('jwt'))
     @Get()
     read() {
         return this.articlesService.read();
     }
 
+
+    // endpoints for get one article with id_article
     @UseGuards(AuthGuard('jwt'))
     @Get(':id_article')
     async find(
@@ -31,6 +38,8 @@ export class ArticlesController {
         return result;
     }
 
+
+    // endpoints for update article 
     @UseGuards(AuthGuard('jwt'))
     @Put(':id_article')
     async update(
@@ -42,6 +51,8 @@ export class ArticlesController {
         return result;
     }
 
+
+    // endpoints for delete one article
     @UseGuards(AuthGuard('jwt'))
     @Delete(':id_article')
     async delete(@Param('id_article') id_article: string) {

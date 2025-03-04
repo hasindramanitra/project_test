@@ -7,27 +7,29 @@ import { useNavigate } from "react-router-dom";
 
 const Signup = ({setSuccessMessage}) => {
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // hook to navigate to another page
 
-    const [username, setUsername] = useState("");
+    const [username, setUsername] = useState(""); // state to define the username
 
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState(""); // state to define the email
 
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState(""); // state to define the password
 
-    const [errorUsernameMsg, setErrorUsernameMsg] = useState("");
+    const [errorUsernameMsg, setErrorUsernameMsg] = useState(""); // define the error message for username
 
-    const [errorEmailMsg, setErrorEmailMsg] = useState("");
+    const [errorEmailMsg, setErrorEmailMsg] = useState(""); // define the error message for email
 
-    const [errorPasswordMsg, setErrorPasswordMsg] = useState("");
+    const [errorPasswordMsg, setErrorPasswordMsg] = useState(""); // define the error message for password
 
-    const [errorMessage, setErrorMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState(''); // define the error message
 
+    // function to validate the email
     const validateEmail = (email) => {
         const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
         return emailRegex.test(email);
     };
 
+    // function to validate the password
     const validatePassword = (password) => {
         const hasUpperCase = /[A-Z]/.test(password);
         const hasNumber = /[0-9]/.test(password);
@@ -37,16 +39,19 @@ const Signup = ({setSuccessMessage}) => {
     };
 
 
+    
+    const [inputType, setInputType] = useState('password'); // state to define the type of input 
 
-    const [inputType, setInputType] = useState('password');
-
+    // function to change the type of input password
     const handleChangeInputType = () => {
         setInputType(inputType === 'password' ? 'text' : 'password');
     }
 
+    // function to send the data of new user to the database
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // error handling
         try {
 
             const response = await axios.post("http://localhost:3000/auth/signup", {
@@ -64,7 +69,7 @@ const Signup = ({setSuccessMessage}) => {
                 setErrorMessage("An error has occured, please try again !");
             }
         } catch (error) {
-
+            
             if (error.status === 403) {
                 setErrorMessage(error.response.data.message);
             } else if (error.status === 400) {

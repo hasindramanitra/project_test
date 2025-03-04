@@ -1,0 +1,59 @@
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3001:80"
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=mysql://root:mypassword@mysql:3306/projet_test?schema=public
+      - JWT_SECRET=project-test
+    networks:
+      - app-network
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: mypassword  # Set root password
+      MYSQL_DATABASE: projet_test                 # Optionally create a user for the app
+      MYSQL_PASSWORD: mypassword       # Set a password for the created user
+    ports:
+      - "3309:3306"                      # Expose MariaDB on port 3306
+    volumes:
+      - mysql_data:/var/lib/mysql      # Persist data across container restarts
+      - ./initiation.sql:/docker-entrypoint-initdb.d/initiation.sql # set the tables of the database
+    networks:
+      - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: mysql  # Set the MariaDB host to the service name
+      PMA_PORT: 3306    # Port MariaDB is listening on
+      PMA_USER: root
+      PMA_PASSWORD: mypassword  # Root password to access MariaDB
+    ports:
+      - "8080:80"  # Expose phpMyAdmin on port 8080
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
