@@ -4,6 +4,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from 'src/prisma/prisma.service';
 
+// class for addig the strategy for Guard of the api using jwt
 @Injectable()
 export class JwtStrategy extends PassportStrategy(
     Strategy,

@@ -4,32 +4,42 @@ import { useNavigate } from 'react-router-dom';
 
 const NewArticle = () => {
 
-    const [idArticle, setIdArticle] = useState(null);
+    const [idArticle, setIdArticle] = useState(null); // defining the first state of our article object
 
-    const [name, setName] = useState("");
+    const [name, setName] = useState(""); // defining the first state of our article object
 
-    const [quantity, setQuantity] = useState(null);
+    const [quantity, setQuantity] = useState(null); // defining the first state of our article object
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // hook to navigate to another page
 
-    const [successMessage, setSuccessMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState(""); // define a state for the successMessage
 
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState(""); // define a state for the errorMessage
 
-    const [errorIdentifiantArticle, setErrorIdentifiantArticle] = useState("");
+    const [errorIdentifiantArticle, setErrorIdentifiantArticle] = useState(""); // define a state for identifiant article error message
 
-    const [errorNameArticle, setErrorNameArticle] = useState("");
+    const [errorNameArticle, setErrorNameArticle] = useState(""); // define a state for name article error message
 
-    const [errorQuantityArticle, setErrorQuantityArticle] = useState("");
+    const [errorQuantityArticle, setErrorQuantityArticle] = useState(""); // define a state for quantity article error message
 
+    const token = localStorage.getItem("authToken"); // get the token from localStorage
+
+
+    // function to send the new article to the database
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // handling error in the request
         try {
 
             const response = await axios.post("http://localhost:3000/articles", {
                 id_article: Number(idArticle),
                 name: name,
                 quantity: Number(quantity)
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             if (response.status === 201) {
@@ -44,7 +54,6 @@ const NewArticle = () => {
             }
 
         } catch (error) {
-            console.log(error);
             if (error.status === 400) {
 
                 if (idArticle === null && name === "" && quantity === null) {

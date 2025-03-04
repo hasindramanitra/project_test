@@ -16,8 +16,11 @@ import ProtectedRoute from './components/ProtectedRoute.jsx'
 function App() {
 
   const [successMessage, setSuccessMessage] = useState("");
+  const [successUpdateMessage, setUpdateSuccessMessage] = useState("");
 
   const isLoggedIn = localStorage.getItem("authToken");
+
+  console.log(successUpdateMessage);
 
   return (
     <>
@@ -29,9 +32,9 @@ function App() {
 
         {/* protected route */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/articles" element={<Articles />} />
+          <Route path="/articles" element={<Articles successUpdateMessage={successUpdateMessage}/>} />
           <Route path="/articles/new" element={<NewArticle />} />
-          <Route path="/articles/edit/:id" element={<UpdateArticle />} />
+          <Route path="/articles/edit/:id" element={<UpdateArticle setUpdateSuccessMessage={setUpdateSuccessMessage}/>} />
         </Route>
       </Routes>
     </>

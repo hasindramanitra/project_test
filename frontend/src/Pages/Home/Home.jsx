@@ -14,7 +14,6 @@ const userPhotos = [
 const Home = () => {
   return (
     <div>
-        <Navbar/>
         <div className='flex justify-center mt-32'>
                 <h1 className='border border-red-600 rounded-full py-1 px-3 cursor-pointer text-base'>Si tu galères à faire tes achats par<span className='text-red-600'>"manque d'info"</span></h1>
             </div>

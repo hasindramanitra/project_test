@@ -1,6 +1,8 @@
 import { IsEmail, IsNotEmpty, IsString, Length, Matches, MinLength } from "class-validator";
 
-
+/**
+ * class for validating the user data
+ */
 export class SignupDto {
 
     @IsString()

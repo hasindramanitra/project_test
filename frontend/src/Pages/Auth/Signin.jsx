@@ -2,45 +2,46 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
-import DelayedMessage from '../../components/DelayedMessage';
 
 
 
 const Signin = ({ successMessage }) => {
 
-  const [inputType, setInputType] = useState('password');
+  const [inputType, setInputType] = useState('password'); // state to define the type of input password
 
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // state to define the value of email
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // define a state for error message
 
-  const [errorEmailMsg, setErrorEmailMsg] = useState("");
+  const [errorEmailMsg, setErrorEmailMsg] = useState(""); // define a state for email error message
 
-  const [errorPasswordMsg, setErrorPasswordMsg] = useState("");
+  const [errorPasswordMsg, setErrorPasswordMsg] = useState(""); // define a state for password error message
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); // state to define the value of email
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // hook to navigate to another page
 
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true); // a boolean to change the state of the message to display after some seconds
 
+  /// hook hide the message after 8seconds
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(false); // Hide the paragraph after 3 seconds
+      setIsVisible(false);
     }, 8000);
 
     // Cleanup the timer when the component unmounts or before setting a new one
     return () => clearTimeout(timer);
   }, []);
 
+  // function to send the user data to the api to generate a token
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // error handling
     try {
       const response = await axios.post("http://localhost:3000/auth/signin", { email: email, password: password });
 
       if (response.status === 201) {
-        console.log("Login successfully");
         const token = response.data.access_token;
         localStorage.setItem("authToken", token);
         localStorage.setItem("keepLoggedIn", JSON.stringify(true));
@@ -75,6 +76,8 @@ const Signin = ({ successMessage }) => {
     }
   }
 
+
+  // function to change the type input for password
   const handleChangeInputType = () => {
     setInputType(inputType === 'password' ? 'text' : 'password');
   }

@@ -2,36 +2,32 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const UpdateArticle = () => {
+const UpdateArticle = ({setUpdateSuccessMessage}) => {
 
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("authToken"); // get the token from localStorage
 
-    const { id } = useParams();
+    const { id } = useParams(); // extract the identification of article from the url
 
-    const navigate = useNavigate();
+    const navigate = useNavigate(); // hook to navigate to another page
 
+    // set the values of our article object
     const [values, setValues] = useState({
         id_article: null,
         name: '',
         quantity: null
     });
 
-    const [idArticle, setIdArticle] = useState(null);
 
-    const [name, setName] = useState("");
 
-    const [quantity, setQuantity] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(""); // define a state of error message
 
-    const [successMessage, setSuccessMessage] = useState("");
+    const [errorIdentifiantArticle, setErrorIdentifiantArticle] = useState(""); // define a state for identifiant article error message
 
-    const [errorMessage, setErrorMessage] = useState("");
+    const [errorNameArticle, setErrorNameArticle] = useState(""); // define a state for name article error message
 
-    const [errorIdentifiantArticle, setErrorIdentifiantArticle] = useState("");
+    const [errorQuantityArticle, setErrorQuantityArticle] = useState(""); // define a state for quantity article error message
 
-    const [errorNameArticle, setErrorNameArticle] = useState("");
-
-    const [errorQuantityArticle, setErrorQuantityArticle] = useState("");
-
+    // hook containing the request to fetch the current article
     useEffect(() => {
         axios.get(`http://localhost:3000/articles/${id}`, {
             headers: {
@@ -46,8 +42,11 @@ const UpdateArticle = () => {
             )
     }, []);
 
+    // function to update the current article in database
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // error handling
         try {
 
             const response = await axios.put(`http://localhost:3000/articles/${id}`, {
@@ -62,7 +61,7 @@ const UpdateArticle = () => {
 
             if (response.status === 200) {
 
-                setSuccessMessage(response.data.message);
+                setUpdateSuccessMessage("Article updated successfully.");
                 setErrorMessage("");
                 navigate("/articles");
 
@@ -72,8 +71,6 @@ const UpdateArticle = () => {
             }
 
         } catch (error) {
-
-            console.error(error);
             if (error.status === 400) {
 
                 if (values.id_article === null && values.name === "" && values.quantity === null) {
@@ -116,8 +113,6 @@ const UpdateArticle = () => {
 
         }
     }
-
-    console.log(errorIdentifiantArticle)
 
     return (
         <div>

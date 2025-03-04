@@ -7,10 +7,16 @@ import { Prisma } from '@prisma/client';
 @Injectable()
 export class ArticlesService {
 
+    // Inject the prisma service as dependency
     constructor(
         private prisma: PrismaService
     ) { }
 
+    /**
+     * method to create a new article
+     * @param dto 
+     * @returns string
+     */
     async create(dto: ArticlesDto) {
 
         try {
@@ -38,6 +44,10 @@ export class ArticlesService {
         }
     }
 
+    /**
+     * method to return all articles 
+     * @returns string | articles
+     */
     async read() {
 
         const articles = this.prisma.articles.findMany();
@@ -49,6 +59,11 @@ export class ArticlesService {
         return articles;
     }
 
+    /**
+     * method to return one article
+     * @param id_article 
+     * @returns string | article
+     */
     async find(
         id_article: number,
     ) {
@@ -65,6 +80,12 @@ export class ArticlesService {
 
     }
 
+    /**
+     * method to update one article
+     * @param id_article 
+     * @param updateArticleDto 
+     * @returns string
+     */
     async update(
         id_article: number,
         updateArticleDto: ArticlesDto
@@ -86,6 +107,12 @@ export class ArticlesService {
         return { message: 'Article updated successfully' };
     }
 
+
+    /**
+     * method to delete one article
+     * @param id_article 
+     * @returns string
+     */
     async delete(id_article: number) {
 
         const article = await this.prisma.articles.findUnique({
